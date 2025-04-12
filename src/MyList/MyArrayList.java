@@ -44,11 +44,25 @@ public class MyArrayList<E> {
     }
 
     public boolean remove(Object object) {
+        E element = (E) object;
+        for (int i = 0; i < size; i++) {
+            if(list[i].equals(element)) {
+                remove(i);
+                return true;
+            }
+        }
         return false;
     }
 
     public E remove(int index) {
-        return list[0];
+        if (isInBounds(index)) {
+            E deletedElement = list[index];
+            System.arraycopy(list, 0, list, 0, index);
+            System.arraycopy(list, index + 1, list, index, size - index - 1);
+            size--;
+            return deletedElement;
+        }
+        return null;
     }
 
     public int size() {
@@ -95,5 +109,4 @@ public class MyArrayList<E> {
     public String toString() {
         return Arrays.toString(Arrays.copyOf(list, size));
     }
-
 }
