@@ -1,8 +1,9 @@
 package MyList;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
-public class MyArrayList<E> {
+public class MyArrayList<E> implements Iterable<E> {
     private static final int DEFAULT_CAPACITY = 10;
     private int size;
     private E[] list;
@@ -27,15 +28,14 @@ public class MyArrayList<E> {
     }
 
     public void add(int index, E element) {
-        if (isInBounds(index)) {
-            if (isFullCapacity()) {
-                expandCapacity();
-            }
-            System.arraycopy(list, 0, list, 0, index);
-            System.arraycopy(list, index, list, index + 1, size - index);
-            list[index] = element;
-            size++;
+        isInBounds(index);
+        if (isFullCapacity()) {
+            expandCapacity();
         }
+        System.arraycopy(list, 0, list, 0, index);
+        System.arraycopy(list, index, list, index + 1, size - index);
+        list[index] = element;
+        size++;
     }
 
     public E get(int index) {
@@ -57,8 +57,12 @@ public class MyArrayList<E> {
     public E remove(int index) {
         if (isInBounds(index)) {
             E deletedElement = list[index];
-            System.arraycopy(list, 0, list, 0, index);
-            System.arraycopy(list, index + 1, list, index, size - index - 1);
+            if (index == size - 1) {
+                list[index] = null;
+            } else {
+                System.arraycopy(list, 0, list, 0, index);
+                System.arraycopy(list, index + 1, list, index, size - index);
+            }
             size--;
             return deletedElement;
         }
@@ -88,17 +92,17 @@ public class MyArrayList<E> {
         return null;
     }
 
-    boolean isFullCapacity() {
+    private boolean isFullCapacity() {
         return size == list.length;
     }
 
-    public void expandCapacity() {
+    private void expandCapacity() {
         E[] tmpList = list;
         list = (E[]) new Object[size * 2];
         System.arraycopy(tmpList, 0, list, 0, size);
     }
 
-    boolean isInBounds(int index) {
+    private boolean isInBounds(int index) {
         if (index < 0 || index > size - 1) {
             throw new IndexOutOfBoundsException("Некорректное значение index: " + index + ". Индекс не может быть < 0 и больше чем " + (size - 1));
         }
@@ -108,5 +112,10 @@ public class MyArrayList<E> {
     @Override
     public String toString() {
         return Arrays.toString(Arrays.copyOf(list, size));
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        return new MyIterator<>(list, size);
     }
 }
