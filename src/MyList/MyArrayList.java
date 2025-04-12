@@ -56,11 +56,22 @@ public class MyArrayList<E> {
     }
 
     public E set(int index, E element) {
-        return list[0];
+        if (isInBounds(index)) {
+            list[index] = element;
+        }
+        return list[index];
     }
 
     public MyArrayList<E> subList(int fromIndex, int toIndex) {
-        return new MyArrayList<>();
+        MyArrayList<E> subList;
+        if (isInBounds(fromIndex) && isInBounds(toIndex)) {
+            int countOfElements = toIndex - fromIndex;
+            subList = new MyArrayList<>(countOfElements);
+            subList.size = countOfElements;
+            System.arraycopy(list, fromIndex, subList.list, 0, toIndex - fromIndex);
+            return subList;
+        }
+        return null;
     }
 
     boolean isFullCapacity() {
@@ -84,5 +95,5 @@ public class MyArrayList<E> {
     public String toString() {
         return Arrays.toString(Arrays.copyOf(list, size));
     }
-    
+
 }
