@@ -52,11 +52,28 @@ public class MyLinkedList<E> implements MyList<E> {
 
     @Override
     public boolean remove(Object object) {
+        E element = (E) object;
+        for (int i = 0; i < size; i++) {
+            if(get(i).equals(element)) {
+                remove(i);
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public E remove(int index) {
+        if (isInBounds(index)) {
+            E deletedElement = get(index);
+            Node<E> targetNode = getNode(index);
+            Node<E> prevNode = targetNode.getPrevElement();
+            Node<E> nextNode = targetNode.getNextElement();
+            prevNode.setNextElement(nextNode);
+            nextNode.setPrevElement(prevNode);
+            size--;
+            return deletedElement;
+        }
         return null;
     }
 
@@ -74,6 +91,15 @@ public class MyLinkedList<E> implements MyList<E> {
 
     @Override
     public MyLinkedList<E> subList(int fromIndex, int toIndex) {
+        MyLinkedList<E> subList = new MyLinkedList<E>();
+        if (isInBounds(fromIndex) && isInBounds(toIndex)) {
+            Node<E> firstNode = getNode(fromIndex);
+            Node<E> lastNode = getNode(toIndex);
+            subList.head.setNextElement(firstNode);
+            subList.tail.setPrevElement(lastNode);
+            subList.size = toIndex - fromIndex;
+            return subList;
+        }
         return null;
     }
 
