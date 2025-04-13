@@ -16,6 +16,6 @@ public interface MyList<E> extends Iterable<E> {
 
     E set(int index, E element);
 
-    MyArrayList<E> subList(int fromIndex, int toIndex);
+    MyList<E> subList(int fromIndex, int toIndex);
 
 }

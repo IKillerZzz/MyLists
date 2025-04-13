@@ -126,5 +126,4 @@ public class MyArrayList<E> implements MyList<E>  {
     public Iterator<E> iterator() {
         return new MyArrayListIterator<>(list, size);
     }
-
 }
