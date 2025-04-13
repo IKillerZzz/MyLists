@@ -31,7 +31,13 @@ public class MyLinkedList<E> implements MyList<E> {
 
     @Override
     public void add(int index, E element) {
-
+        isInBounds(index);
+        Node<E> targetNode = getNode(index);
+        Node<E> prevNode = targetNode.getPrevElement();
+        Node<E> newNode = new Node<>(prevNode, element, targetNode);
+        prevNode.setNextElement(newNode);
+        targetNode.setPrevElement(newNode);
+        size++;
     }
 
     @Override
@@ -61,7 +67,9 @@ public class MyLinkedList<E> implements MyList<E> {
 
     @Override
     public E set(int index, E element) {
-        return null;
+        Node<E> targetNode = getNode(index);
+        targetNode.setCurrentElement(element);
+        return targetNode.getCurrentElement();
     }
 
     @Override
@@ -74,6 +82,15 @@ public class MyLinkedList<E> implements MyList<E> {
             throw new IndexOutOfBoundsException("Некорректное значение index: " + index + ". Индекс не может быть < 0 и больше чем " + (size - 1));
         }
         return true;
+    }
+
+    private Node<E> getNode(int index) {
+        isInBounds(index);
+        Node<E> currentNode = head.getNextElement();
+        for (int i = 0; i < index; i++) {
+            currentNode = currentNode.getNextElement();
+        }
+        return currentNode;
     }
 
     @Override
