@@ -1,12 +1,32 @@
 package MyList;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class MyLinkedList<E> implements MyList<E> {
+    private Node<E> head;
+    private Node<E> tail;
+    private int size = 0;
+
+    public MyLinkedList() {
+        head = new Node<E>(null, null, tail);
+        tail = new Node<E>(head, null, null);
+    }
 
     @Override
     public boolean add(E element) {
-        return false;
+        if (size == 0) {
+            Node<E> newNode = new Node<>(head, element, tail);
+            head.setNextElement(newNode);
+            tail.setPrevElement(newNode);
+        } else {
+            Node<E> prevNode = tail;
+            prevNode.setCurrentElement(element);
+            tail = new Node<E>(prevNode, null, null);
+            prevNode.setNextElement(tail);
+        }
+        size++;
+        return true;
     }
 
     @Override
@@ -16,7 +36,12 @@ public class MyLinkedList<E> implements MyList<E> {
 
     @Override
     public E get(int index) {
-        return null;
+        isInBounds(index);
+        Node<E> currentNode = head.getNextElement();
+        for (int i = 0; i < index; i++) {
+            currentNode = currentNode.getNextElement();
+        }
+        return currentNode.getCurrentElement();
     }
 
     @Override
@@ -31,7 +56,7 @@ public class MyLinkedList<E> implements MyList<E> {
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
@@ -44,8 +69,60 @@ public class MyLinkedList<E> implements MyList<E> {
         return null;
     }
 
+    private boolean isInBounds(int index) {
+        if (index < 0 || index > size - 1) {
+            throw new IndexOutOfBoundsException("Некорректное значение index: " + index + ". Индекс не может быть < 0 и больше чем " + (size - 1));
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        E[] array = (E[]) new Object[size];
+        for (int i = 0; i < size; i++) {
+            array[i] = get(i);
+        }
+        return Arrays.toString(array);
+    }
+
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new MyLinkedListIterator<E>(this);
+    }
+
+    private static class Node<E> {
+        Node<E> prevElement;
+        E currentElement;
+        Node<E> nextElement;
+
+        public Node(Node<E> prevElement, E currentElement, Node<E> nextElement) {
+            this.prevElement = prevElement;
+            this.currentElement = currentElement;
+            this.nextElement = nextElement;
+        }
+
+        public void setPrevElement(Node<E> node) {
+            prevElement = node;
+        }
+
+        public void setCurrentElement(E element) {
+            currentElement = element;
+        }
+
+        public void setNextElement(Node<E> node) {
+            nextElement = node;
+        }
+
+        public Node<E> getPrevElement() {
+            return prevElement;
+        }
+
+        public E getCurrentElement() {
+            return currentElement;
+        }
+
+        public Node<E> getNextElement() {
+            return nextElement;
+        }
     }
 }
