@@ -3,7 +3,7 @@ package MyList;
 import java.util.Arrays;
 import java.util.Iterator;
 
-public class MyArrayList<E> implements Iterable<E> {
+public class MyArrayList<E> implements MyList<E>  {
     private static final int DEFAULT_CAPACITY = 10;
     private int size;
     private E[] list;
@@ -19,6 +19,7 @@ public class MyArrayList<E> implements Iterable<E> {
         list = (E[]) new Object[capacity];
     }
 
+    @Override
     public boolean add(E element) {
         if (isFullCapacity()) {
             expandCapacity();
@@ -27,6 +28,7 @@ public class MyArrayList<E> implements Iterable<E> {
         return true;
     }
 
+    @Override
     public void add(int index, E element) {
         isInBounds(index);
         if (isFullCapacity()) {
@@ -38,11 +40,13 @@ public class MyArrayList<E> implements Iterable<E> {
         size++;
     }
 
+    @Override
     public E get(int index) {
         isInBounds(index);
         return list[index];
     }
 
+    @Override
     public boolean remove(Object object) {
         E element = (E) object;
         for (int i = 0; i < size; i++) {
@@ -54,6 +58,7 @@ public class MyArrayList<E> implements Iterable<E> {
         return false;
     }
 
+    @Override
     public E remove(int index) {
         if (isInBounds(index)) {
             E deletedElement = list[index];
@@ -69,10 +74,12 @@ public class MyArrayList<E> implements Iterable<E> {
         return null;
     }
 
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public E set(int index, E element) {
         if (isInBounds(index)) {
             list[index] = element;
@@ -80,11 +87,12 @@ public class MyArrayList<E> implements Iterable<E> {
         return list[index];
     }
 
+    @Override
     public MyArrayList<E> subList(int fromIndex, int toIndex) {
-        MyArrayList<E> subList;
+       MyArrayList<E> subList;
         if (isInBounds(fromIndex) && isInBounds(toIndex)) {
             int countOfElements = toIndex - fromIndex;
-            subList = new MyArrayList<>(countOfElements);
+            subList = new MyArrayList<E>(countOfElements);
             subList.size = countOfElements;
             System.arraycopy(list, fromIndex, subList.list, 0, toIndex - fromIndex);
             return subList;
@@ -116,6 +124,7 @@ public class MyArrayList<E> implements Iterable<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new MyIterator<>(list, size);
+        return new MyArrayListIterator<>(list, size);
     }
+
 }

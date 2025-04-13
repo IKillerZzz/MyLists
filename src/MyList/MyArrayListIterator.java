@@ -2,12 +2,12 @@ package MyList;
 
 import java.util.Iterator;
 
-public class MyIterator<E> implements Iterator<E> {
+public class MyArrayListIterator<E> implements Iterator<E> {
     private int index;
     E[] list;
     int size;
 
-    MyIterator(E[] list, int size) {
+    MyArrayListIterator(E[] list, int size) {
         this.list = list;
         this.size = size;
     }
