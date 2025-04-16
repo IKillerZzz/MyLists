@@ -68,9 +68,19 @@ public class MyLinkedList<E> implements MyList<E> {
     @Override
     public E get(int index) {
         isInBounds(index);
-        Node<E> currentNode = head.getNextElement();
-        for (int i = 0; i < index; i++) {
-            currentNode = currentNode.getNextElement();
+        int middleIndex = size / 2;
+        Node<E> currentNode;
+
+        if (index < middleIndex) {
+            currentNode = head.getNextElement();
+            for (int i = 0; i < index; i++) {
+                currentNode = currentNode.getNextElement();
+            }
+        } else {
+            currentNode = tail.getPrevElement();
+            for (int i = size - 1; i > index; i--) {
+                currentNode = currentNode.getPrevElement();
+            }
         }
         return currentNode.getCurrentElement();
     }
@@ -169,15 +179,25 @@ public class MyLinkedList<E> implements MyList<E> {
     }
 
     /**
-     * Возвращает объект Node, который назодится по указанному в параметрах индексу.
+     * Возвращает объект Node, который находится по указанному в параметрах индексу.
      * @param index - целочисленное значение, по позиции которому нужно поучить узел из списка.
      * @return объект Node, который находится по заданному индексу.
      */
     private Node<E> getNode(int index) {
         isInBounds(index);
-        Node<E> currentNode = head.getNextElement();
-        for (int i = 0; i < index; i++) {
-            currentNode = currentNode.getNextElement();
+        int middleIndex = size / 2;
+        Node<E> currentNode;
+
+        if (index < middleIndex) {
+            currentNode = head.getNextElement();
+            for (int i = 0; i < index; i++) {
+                currentNode = currentNode.getNextElement();
+            }
+        } else {
+            currentNode = tail.getPrevElement();
+            for (int i = size - 1; i > index; i--) {
+                currentNode = currentNode.getPrevElement();
+            }
         }
         return currentNode;
     }
